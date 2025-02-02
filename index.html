@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff4b6e;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #ff4b6e;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: #f8f9fa;
+            color: #ff4b6e;
+            position: relative;
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4b6e;
+            transform: rotate(45deg);
+            animation: heartfall linear infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4b6e;
+        }
+
+        .heart::before {
+            left: -10px;
+        }
+
+        .heart::after {
+            top: -10px;
+        }
+
+        @keyframes heartfall {
+            to {
+                transform: translateY(100vh) rotate(45deg);
+            }
+        }
+
+        .success-message {
+            display: none;
+            color: #ff4b6e;
+            font-size: 2rem;
+            margin-top: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .capoo-gif {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+
+        .capoo-gif img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts"></div>
+    <div class="container">
+        <div class="capoo-gif">
+            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3g3bXJlZzRuNjhhNjZ3cnRvZ2NsMnZta3Y2YWczdHVxZ210bGdkNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/m93WfeOUyZwH9wYfUV/giphy.gif" alt="Capoo" id="capooGif">
+        </div>
+        <h1>Will you be my Valentine? ❤️</h1>
+        <div class="buttons">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+        <div class="success-message">
+            Thank you love! MWAHHHH! ❤️
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const successMessage = document.querySelector('.success-message');
+        const container = document.querySelector('.container');
+        const heartsContainer = document.querySelector('.hearts');
+        const capooGif = document.getElementById('capooGif');
+
+        let hasMovedOnce = false;
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        noBtn.addEventListener('click', () => {
+            if (!hasMovedOnce) {
+                capooGif.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2w2YWFxdG53MmV3YXM0Ym40cmF2c3BrMzdrMXlsanNpMm0wMzg4bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/QlQdLBS70XJcZY1fLF/giphy.gif";
+                hasMovedOnce = true;
+            }
+
+            const noBtnRect = noBtn.getBoundingClientRect();
+            const maxX = window.innerWidth - noBtnRect.width;
+            const maxY = window.innerHeight - noBtnRect.height;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        });
+
+        yesBtn.addEventListener('click', () => {
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
+            successMessage.style.display = 'block';
+            
+            // Change to happy Capoo GIF
+            capooGif.src = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3M3ZmV6aG8wZ3VybjJmOGhzaGxwNDZicXFreXZ2bTQxa2M2cmpqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/sRLfDd1R33y1OHGMUB/giphy.gif";
+            
+            // Create extra hearts for celebration
+            for(let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        });
+    </script>
+</body>
+</html>
