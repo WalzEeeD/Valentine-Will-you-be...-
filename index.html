@@ -39,7 +39,7 @@
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
 
         #yesBtn {
@@ -149,6 +149,7 @@
         const capooGif = document.getElementById('capooGif');
 
         let hasMovedOnce = false;
+        let noCount = 0;
 
         function createHeart() {
             const heart = document.createElement('div');
@@ -169,6 +170,17 @@
                 capooGif.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2w2YWFxdG53MmV3YXM0Ym40cmF2c3BrMzdrMXlsanNpMm0wMzg4bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/QlQdLBS70XJcZY1fLF/giphy.gif";
                 hasMovedOnce = true;
             }
+
+            noCount++;
+            
+            // Increase Yes button size
+            const scale = 1 + (noCount * 0.5); // Increases by 50% each time
+            const fontSize = 1.2 + (noCount * 0.3); // Increases font size
+            const padding = 15 + (noCount * 5); // Increases padding
+            
+            yesBtn.style.transform = `scale(${scale})`;
+            yesBtn.style.fontSize = `${fontSize}rem`;
+            yesBtn.style.padding = `${padding}px ${padding * 2}px`;
 
             const noBtnRect = noBtn.getBoundingClientRect();
             const maxX = window.innerWidth - noBtnRect.width;
