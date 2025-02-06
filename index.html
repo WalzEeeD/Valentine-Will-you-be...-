@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Be My Valentine?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
     <style>
         body {
             height: 100vh;
@@ -10,7 +11,7 @@
             align-items: center;
             margin: 0;
             background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            font-family: 'Arial', sans-serif;
+            font-family: 'Bubblegum Sans', cursive;
             overflow: hidden;
         }
 
@@ -20,9 +21,10 @@
 
         h1 {
             color: #ff4b6e;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 3rem;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
             margin-bottom: 30px;
+            letter-spacing: 1px;
         }
 
         .buttons {
@@ -35,11 +37,14 @@
 
         button {
             padding: 15px 30px;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Bubblegum Sans', cursive;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+            white-space: nowrap; /* Prevents text from wrapping */
         }
 
         #yesBtn {
@@ -49,12 +54,15 @@
 
         #yesBtn:hover {
             transform: scale(1.1);
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
         }
 
         #noBtn {
             background-color: #f8f9fa;
             color: #ff4b6e;
             position: relative;
+            transition: all 0.3s ease;
+            min-width: fit-content; /* Ensures button fits text */
         }
 
         .hearts {
@@ -101,9 +109,10 @@
         .success-message {
             display: none;
             color: #ff4b6e;
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-top: 20px;
             animation: bounce 1s infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         @keyframes bounce {
@@ -151,6 +160,30 @@
         let hasMovedOnce = false;
         let noCount = 0;
 
+        // Array of different "No" button texts
+        const noVariations = [
+            "No",
+            "Are you sure?",
+            "Really sure?",
+            "Think again!",
+            "Last chance!",
+            "Surely not?",
+            "You might regret this!",
+            "Give it another thought!",
+            "Are you absolutely sure?",
+            "This could be a mistake!",
+            "Have a heart!",
+            "Don't be so cold!",
+            "Change of heart?",
+            "Wouldn't you reconsider?",
+            "Is that your final answer?",
+            "You're breaking my heart ;(",
+            "I'm gonna cry...",
+            "Pretty please?",
+            "Would you please reconsider?",
+            "This is your last chance!"
+        ];
+
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
@@ -174,13 +207,26 @@
             noCount++;
             
             // Increase Yes button size
-            const scale = 1 + (noCount * 0.5); // Increases by 50% each time
-            const fontSize = 1.2 + (noCount * 0.3); // Increases font size
-            const padding = 15 + (noCount * 5); // Increases padding
+            const yesScale = 1 + (noCount * 0.5);
+            const yesFontSize = 1.5 + (noCount * 0.3);
+            const yesPadding = 15 + (noCount * 5);
             
-            yesBtn.style.transform = `scale(${scale})`;
-            yesBtn.style.fontSize = `${fontSize}rem`;
-            yesBtn.style.padding = `${padding}px ${padding * 2}px`;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            yesBtn.style.fontSize = `${yesFontSize}rem`;
+            yesBtn.style.padding = `${yesPadding}px ${yesPadding * 2}px`;
+
+            // Decrease No button size more slowly
+            const noScale = Math.max(0.5, 1 - (noCount * 0.05)); // Reduced from 0.1 to 0.05
+            const noFontSize = Math.max(0.8, 1.5 - (noCount * 0.05)); // Reduced decrease rate
+            const noPadding = Math.max(8, 15 - (noCount * 0.5)); // Reduced decrease rate
+            
+            noBtn.style.transform = `scale(${noScale})`;
+            noBtn.style.fontSize = `${noFontSize}rem`;
+            noBtn.style.padding = `${noPadding}px ${noPadding * 2}px`;
+
+            // Change the No button text
+            const variationIndex = Math.min(noCount - 1, noVariations.length - 1);
+            noBtn.textContent = noVariations[variationIndex];
 
             const noBtnRect = noBtn.getBoundingClientRect();
             const maxX = window.innerWidth - noBtnRect.width;
@@ -199,10 +245,8 @@
             yesBtn.style.display = 'none';
             successMessage.style.display = 'block';
             
-            // Change to happy Capoo GIF
             capooGif.src = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3M3ZmV6aG8wZ3VybjJmOGhzaGxwNDZicXFreXZ2bTQxa2M2cmpqMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/sRLfDd1R33y1OHGMUB/giphy.gif";
             
-            // Create extra hearts for celebration
             for(let i = 0; i < 20; i++) {
                 setTimeout(createHeart, i * 100);
             }
